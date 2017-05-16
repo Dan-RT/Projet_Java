@@ -45,7 +45,15 @@ public class Cercle extends JPanel {
         return false;
     }
 
+    public void change_color () {
+        color = Color.yellow;
+        this.repaint();
+    }
 
+    public void reset_color () {
+        color = Color.red;
+        this.repaint();
+    }
 
     public int getPosX() {
         return posX;

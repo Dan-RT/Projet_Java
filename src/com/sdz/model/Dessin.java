@@ -23,7 +23,7 @@ public class Dessin implements Observable, MouseListener  {
     //private ArrayList<JPanel> liste_Image = new ArrayList<JPanel>();
     private ArrayList<Cercle> liste_Cercle = new ArrayList<Cercle>();
     private ArrayList<Rectangle> liste_Rectangle = new ArrayList<Rectangle>();
-    private JPanel form_selected = new JPanel();
+    private Cercle form_selected = null;
 
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
 
@@ -33,6 +33,7 @@ public class Dessin implements Observable, MouseListener  {
     private Button bouton_1 = new Button("Cercle");
     private Button bouton_2 = new Button("Rectangle");
     private Button bouton_3 = new Button("Effacer");
+    private Button change_color_button = new Button("Jaune");
     private JLabel label = new JLabel("Le JLabel");
 
     //private Bouton_Observateur bouton_1_observer;
@@ -61,6 +62,7 @@ public class Dessin implements Observable, MouseListener  {
         south.add(bouton_1);
         south.add(bouton_2);
         south.add(bouton_3);
+        south.add(change_color_button);
         south.add(label);
         south.setBounds(0, 400, 500, 200);
         pan_dessin.add(south);
@@ -68,6 +70,7 @@ public class Dessin implements Observable, MouseListener  {
         bouton_1.addActionListener(new Bouton_1_Listener());
         bouton_2.addActionListener(new Bouton_2_Listener());
         bouton_3.addActionListener(new Bouton_3_Listener());
+        change_color_button.addActionListener(new Change_color_button_Listener());
 
         image.addMouseListener(this);
     }
@@ -95,30 +98,30 @@ public class Dessin implements Observable, MouseListener  {
         //Classe écoutant notre premier bouton
 
         public void actionPerformed(ActionEvent arg0) {
-            label.setText("Cercle");
 
-            System.out.println("Ajout cercle!!");
+            if (form_selected == null) {
+                label.setText("Cercle");
 
+                System.out.println("Ajout cercle!!");
 
-            int hauteur = 50, longueur = 50;
-            int x = mouse_click_x - hauteur/2;
-            int y = mouse_click_y - longueur/2;
+                int hauteur = 50, longueur = 50;
+                int x = mouse_click_x - hauteur/2;
+                int y = mouse_click_y - longueur/2;
 
+                Cercle cercle_tmp = new Cercle(x, y, hauteur, longueur);
+                image.add(cercle_tmp);
+                //pan_dessin.add(cercle_tmp);
+                cercle_tmp.setBounds(x, y, hauteur, longueur);
 
+                liste_Cercle.add(cercle_tmp);
 
-            Cercle cercle_tmp = new Cercle(x, y, hauteur, longueur);
-            image.add(cercle_tmp);
-            //pan_dessin.add(cercle_tmp);
-            cercle_tmp.setBounds(x, y, hauteur, longueur);
+                updateObservateur();
+            }
 
-            liste_Cercle.add(cercle_tmp);
-
-            updateObservateur();
         }
 
         private boolean pushed = false;
         private Bouton_Observateur bouton_observer;
-
 
     }
 
@@ -126,23 +129,27 @@ public class Dessin implements Observable, MouseListener  {
     class Bouton_2_Listener implements ActionListener {
 
         public void actionPerformed(ActionEvent arg0) {
-            label.setText("Rectangle");
 
-            int hauteur = 50, longueur = 50;
-            int x = mouse_click_x - hauteur/2;
-            int y = mouse_click_y - longueur/2;
-            System.out.println("Ajout Rectange!!");
+            if (form_selected == null) {
+                label.setText("Rectangle");
 
-            Rectangle rectangle_tmp = new Rectangle(x, y, hauteur, longueur);
-            image.add(rectangle_tmp);
-            //pan_dessin.add(rectangle_tmp);
+                int hauteur = 50, longueur = 50;
+                int x = mouse_click_x - hauteur/2;
+                int y = mouse_click_y - longueur/2;
+                System.out.println("Ajout Rectange!!");
 
-            rectangle_tmp.setBackground(Color.blue);
-            rectangle_tmp.setBounds(x, y, hauteur, longueur);
+                Rectangle rectangle_tmp = new Rectangle(x, y, hauteur, longueur);
+                image.add(rectangle_tmp);
+                //pan_dessin.add(rectangle_tmp);
 
-            liste_Rectangle.add(rectangle_tmp);
+                rectangle_tmp.setBackground(Color.blue);
+                rectangle_tmp.setBounds(x, y, hauteur, longueur);
 
-            updateObservateur();
+                liste_Rectangle.add(rectangle_tmp);
+
+                updateObservateur();
+            }
+
         }
     }
 
@@ -158,33 +165,53 @@ public class Dessin implements Observable, MouseListener  {
         }
     }
 
+    class Change_color_button_Listener implements ActionListener {
+        public void actionPerformed(ActionEvent arg0) {
+            if (form_selected != null) {
+                form_selected.change_color();
+            }
+        }
+    }
+
 
     //Méthode appelée lors du clic de souris
     public void mouseClicked(MouseEvent event) {
-        mouse_click_x = event.getX();
-        mouse_click_y = event.getY();
-        label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
 
-        form_selection(mouse_click_x, mouse_click_y);
-        updateObservateur();
+        if (form_selected == null) {
+            mouse_click_x = event.getX();
+            mouse_click_y = event.getY();
+            label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
+
+            form_selection(mouse_click_x, mouse_click_y);
+            updateObservateur();
+        } else {
+            form_selection(mouse_click_x, mouse_click_y);
+        }
+
     }
 
 
     public boolean form_selection (int X, int Y) {
-        for (Cercle tmp : liste_Cercle) {
-            if (tmp.selected(X, Y)) {
-                form_selected = tmp;
-                return true;
+        if (form_selected == null) {
+            for (Cercle tmp : liste_Cercle) {
+                if (tmp.selected(X, Y)) {
+                    form_selected = tmp;
+                    return true;
+                }
             }
-        }
-        for (Rectangle tmp : liste_Rectangle) {
-            if (tmp.selected(X, Y)) {
-                form_selected = tmp;
-                return true;
+            for (Rectangle tmp : liste_Rectangle) {
+                if (tmp.selected(X, Y)) {
+                    //form_selected = tmp;
+                    return true;
+                }
             }
+            form_selected = null;
+            return false;
+        } else {
+            form_selected.reset_color();
+            form_selected = null;
+            return false;
         }
-        form_selected = null;
-        return false;
     }
 
 

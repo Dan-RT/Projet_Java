@@ -8,8 +8,8 @@ import java.awt.*;
  */
 public class Cercle extends JPanel {
 
-    private int posX = 100;
-    private int posY = 100;
+    private int posX = 0;
+    private int posY = 0;
 
     private Color color = Color.red;
 

@@ -21,12 +21,14 @@ import java.util.ArrayList;
 public class Dessin implements Observable, MouseListener  {
 
     private ArrayList<JPanel> liste_Image = new ArrayList<JPanel>();
-    private Cercle image_test = new Cercle(50, 50);
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
+
+    private JPanel image = new JPanel();
     private Observateur dessin_observer;
 
     private Button bouton_1 = new Button("Cercle");
     private Button bouton_2 = new Button("Rectangle");
+    private Button bouton_3 = new Button("Effacer");
     private JLabel label = new JLabel("Le JLabel");
 
     //private Bouton_Observateur bouton_1_observer;
@@ -41,7 +43,9 @@ public class Dessin implements Observable, MouseListener  {
         pan_dessin.setBackground(Color.white);
         pan_dessin.setLayout(null);
 
-        image_test.setBounds(0, 0, 500, 400);
+        image.setLayout(null);
+        image.setBounds(0, 0, 500, 400);
+        pan_dessin.add(image);
         pan_dessin.setBackground(Color.green);
 
         System.out.println("Dessin()");
@@ -52,21 +56,152 @@ public class Dessin implements Observable, MouseListener  {
         south.setBackground(Color.red);
         south.add(bouton_1);
         south.add(bouton_2);
+        south.add(bouton_3);
         south.add(label);
         south.setBounds(0, 400, 500, 200);
         pan_dessin.add(south);
 
         bouton_1.addActionListener(new Bouton_1_Listener());
         bouton_2.addActionListener(new Bouton_2_Listener());
+        bouton_3.addActionListener(new Bouton_3_Listener());
 
-        pan_dessin.addMouseListener(this);
+        image.addMouseListener(this);
     }
 
     public void initial_print() {
         updateObservateur();
     }
 
-    public void go() {
+
+
+    public void addObservateur(Observateur obs) {
+        this.dessin_observer = obs;
+    }
+
+    public void delObservateur() {
+
+    }
+
+    public void updateObservateur() {
+        this.dessin_observer.update(pan_dessin);
+    }
+
+
+    class Bouton_1_Listener implements ActionListener /*, Bouton_Observable */ {
+        //Classe écoutant notre premier bouton
+
+        public void actionPerformed(ActionEvent arg0) {
+            label.setText("Cercle");
+
+            System.out.println("Ajout cercle!!");
+
+            Cercle cercle_tmp = new Cercle(0, 0);
+            image.add(cercle_tmp);
+            //pan_dessin.add(cercle_tmp);
+            cercle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
+
+            liste_Image.add(cercle_tmp);
+
+            updateObservateur();
+        }
+
+        private boolean pushed = false;
+        private Bouton_Observateur bouton_observer;
+
+
+    }
+
+    //Classe écoutant notre second bouton
+    class Bouton_2_Listener implements ActionListener {
+
+        public void actionPerformed(ActionEvent arg0) {
+            label.setText("Rectangle");
+
+            System.out.println("Ajout Rectange!!");
+
+            Rectangle rectangle_tmp = new Rectangle(0, 0);
+            image.add(rectangle_tmp);
+            //pan_dessin.add(rectangle_tmp);
+
+            rectangle_tmp.setBackground(Color.blue);
+            rectangle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
+
+            liste_Image.add(rectangle_tmp);
+
+            updateObservateur();
+        }
+    }
+
+    class Bouton_3_Listener implements ActionListener {
+        public void actionPerformed(ActionEvent arg0) {
+            label.setText("Supprimé");
+
+            image = new JPanel();
+            //liste_Image.clear();
+            //pan_dessin.remove(liste_Image.get(0));
+
+            updateObservateur();
+        }
+    }
+
+
+    //Méthode appelée lors du clic de souris
+    public void mouseClicked(MouseEvent event) {
+        mouse_click_x = event.getX();
+        mouse_click_y = event.getY();
+        label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
+        updateObservateur();
+    }
+
+    //Méthode appelée lors du survol de la souris
+    public void mouseEntered(MouseEvent event) { }
+
+    //Méthode appelée lorsque la souris sort de la zone du bouton
+    public void mouseExited(MouseEvent event) { }
+
+    //Méthode appelée lorsque l'on presse le bouton gauche de la souris
+    public void mousePressed(MouseEvent event) { }
+
+    //Méthode appelée lorsque l'on relâche le clic de souris
+    public void mouseReleased(MouseEvent event) { }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+        public void addObservateur(Bouton_Observateur obs) {
+            this.bouton_observer = obs;
+        }
+
+        public void delObservateur() {
+
+        }
+
+
+        public void updateObservateur() {
+            this.bouton_observer.update(pushed);
+        }
+
+        public void actionPerformed(ActionEvent arg0) {
+            pushed = true;
+            updateObservateur();
+            pushed = false;
+        }
+
+        public void go() {
         // Les coordonnées de départ de notre rond
         int x = image_test.getPosX(), y = image_test.getPosY();
         // Le booléen pour savoir si l'on recule ou non sur l'axe x
@@ -116,110 +251,4 @@ public class Dessin implements Observable, MouseListener  {
         }
     }
 
-    public void addObservateur(Observateur obs) {
-        this.dessin_observer = obs;
-    }
-
-    public void delObservateur() {
-
-    }
-
-    public void updateObservateur() {
-        this.dessin_observer.update(pan_dessin);
-    }
-
-
-    class Bouton_1_Listener implements ActionListener /*, Bouton_Observable */ {
-        //Classe écoutant notre premier bouton
-
-        public void actionPerformed(ActionEvent arg0) {
-            label.setText("Cercle");
-
-            System.out.println("Ajout cercle!!");
-
-            Cercle cercle_tmp = new Cercle(0, 0);
-            pan_dessin.add(cercle_tmp);
-            cercle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
-
-
-            //liste_Image.add(cercle_tmp);
-
-            /*for (JPanel tmp : liste_Image) {
-                pan_dessin.add(tmp);
-                tmp.setBounds(0, 0, 500, 500);
-
-            }*/
-
-            updateObservateur();
-        }
-
-        private boolean pushed = false;
-        private Bouton_Observateur bouton_observer;
-
-        /*
-        public void addObservateur(Bouton_Observateur obs) {
-            this.bouton_observer = obs;
-        }
-
-        public void delObservateur() {
-
-        }
-
-
-        public void updateObservateur() {
-            this.bouton_observer.update(pushed);
-        }
-
-        public void actionPerformed(ActionEvent arg0) {
-            pushed = true;
-            updateObservateur();
-            pushed = false;
-        }*/
-    }
-
-    //Classe écoutant notre second bouton
-    class Bouton_2_Listener implements ActionListener {
-
-        public void actionPerformed(ActionEvent arg0) {
-            label.setText("Rectangle");
-
-            System.out.println("Ajout Rectange!!");
-
-            Rectangle rectangle_tmp = new Rectangle(0, 0);
-            pan_dessin.add(rectangle_tmp);
-            rectangle_tmp.setBackground(Color.blue);
-            rectangle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
-
-            /*liste_Image.add(rectangle_tmp);
-
-            for (JPanel tmp : liste_Image) {
-                pan_dessin.add(tmp);
-                tmp.setBounds(100, 100, 500, 500);
-            }*/
-            updateObservateur();
-        }
-    }
-
-
-
-    //Méthode appelée lors du clic de souris
-    public void mouseClicked(MouseEvent event) {
-        mouse_click_x = event.getX();
-        mouse_click_y = event.getY();
-        label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
-        updateObservateur();
-    }
-
-    //Méthode appelée lors du survol de la souris
-    public void mouseEntered(MouseEvent event) { }
-
-    //Méthode appelée lorsque la souris sort de la zone du bouton
-    public void mouseExited(MouseEvent event) { }
-
-    //Méthode appelée lorsque l'on presse le bouton gauche de la souris
-    public void mousePressed(MouseEvent event) { }
-
-    //Méthode appelée lorsque l'on relâche le clic de souris
-    public void mouseReleased(MouseEvent event) { }
-
-}
+        */

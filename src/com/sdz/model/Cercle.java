@@ -6,10 +6,10 @@ import java.awt.*;
 /**
  * Created by Daniel on 14/05/2017.
  */
-public class Cercle  extends JPanel {
+public class Cercle extends JPanel {
 
-    private int posX = 50;
-    private int posY = 50;
+    private int posX = 100;
+    private int posY = 100;
 
     private Color color = Color.red;
 

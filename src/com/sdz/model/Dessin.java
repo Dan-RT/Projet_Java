@@ -8,6 +8,9 @@ import com.sdz.model.Rectangle;
 import com.sdz.model.Cercle;
 import com.sdz.vue.Fenetre;
 
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,19 +18,22 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class Dessin implements Observable  {
+public class Dessin implements Observable, MouseListener  {
 
     private ArrayList<JPanel> liste_Image = new ArrayList<JPanel>();
     private Cercle image_test = new Cercle(50, 50);
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
     private Observateur dessin_observer;
 
-    private Button bouton_1 = new Button("Rectangle");
-    private Button bouton_2 = new Button("Cercle");
+    private Button bouton_1 = new Button("Cercle");
+    private Button bouton_2 = new Button("Rectangle");
     private JLabel label = new JLabel("Le JLabel");
 
-    private Bouton_Observateur bouton_1_observer;
-    private Bouton_Observateur bouton_2_observer;
+    //private Bouton_Observateur bouton_1_observer;
+    //private Bouton_Observateur bouton_2_observer;
+
+    private int mouse_click_x = 100;
+    private int mouse_click_y = 150;
 
     public Dessin () {
 
@@ -38,9 +44,6 @@ public class Dessin implements Observable  {
         image_test.setBounds(0, 0, 500, 400);
         pan_dessin.setBackground(Color.green);
 
-        //pan_dessin.add(image_test);
-
-        //pan_dessin.add(image_test, BorderLayout.NORTH);
         System.out.println("Dessin()");
 
 
@@ -56,6 +59,7 @@ public class Dessin implements Observable  {
         bouton_1.addActionListener(new Bouton_1_Listener());
         bouton_2.addActionListener(new Bouton_2_Listener());
 
+        pan_dessin.addMouseListener(this);
     }
 
     public void initial_print() {
@@ -112,7 +116,6 @@ public class Dessin implements Observable  {
         }
     }
 
-
     public void addObservateur(Observateur obs) {
         this.dessin_observer = obs;
     }
@@ -126,18 +129,19 @@ public class Dessin implements Observable  {
     }
 
 
-
     class Bouton_1_Listener implements ActionListener /*, Bouton_Observable */ {
         //Classe écoutant notre premier bouton
 
         public void actionPerformed(ActionEvent arg0) {
-            label.setText("Rectangle");
+            label.setText("Cercle");
 
-            System.out.println("Ajout rectangle!!");
+            System.out.println("Ajout cercle!!");
 
             Cercle cercle_tmp = new Cercle(0, 0);
             pan_dessin.add(cercle_tmp);
-            cercle_tmp.setBounds(0, 0, 50, 50);
+            cercle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
+
+
             //liste_Image.add(cercle_tmp);
 
             /*for (JPanel tmp : liste_Image) {
@@ -173,19 +177,19 @@ public class Dessin implements Observable  {
         }*/
     }
 
-
     //Classe écoutant notre second bouton
     class Bouton_2_Listener implements ActionListener {
 
         public void actionPerformed(ActionEvent arg0) {
-            label.setText("Cercle");
+            label.setText("Rectangle");
 
-            System.out.println("Ajout Cercle!!");
+            System.out.println("Ajout Rectange!!");
 
             Rectangle rectangle_tmp = new Rectangle(0, 0);
             pan_dessin.add(rectangle_tmp);
             rectangle_tmp.setBackground(Color.blue);
-            rectangle_tmp.setBounds(100, 100, 50, 50);
+            rectangle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
+
             /*liste_Image.add(rectangle_tmp);
 
             for (JPanel tmp : liste_Image) {
@@ -195,4 +199,27 @@ public class Dessin implements Observable  {
             updateObservateur();
         }
     }
+
+
+
+    //Méthode appelée lors du clic de souris
+    public void mouseClicked(MouseEvent event) {
+        mouse_click_x = event.getX();
+        mouse_click_y = event.getY();
+        label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
+        updateObservateur();
+    }
+
+    //Méthode appelée lors du survol de la souris
+    public void mouseEntered(MouseEvent event) { }
+
+    //Méthode appelée lorsque la souris sort de la zone du bouton
+    public void mouseExited(MouseEvent event) { }
+
+    //Méthode appelée lorsque l'on presse le bouton gauche de la souris
+    public void mousePressed(MouseEvent event) { }
+
+    //Méthode appelée lorsque l'on relâche le clic de souris
+    public void mouseReleased(MouseEvent event) { }
+
 }

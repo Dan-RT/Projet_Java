@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 
 public class Fenetre extends JFrame {
 
-    private Image pan = new Image();
+    //private Image pan = new Image();
     private Dessin test_dessin = new Dessin();
 
     //private Image tmp_image = new Image();
@@ -46,6 +46,10 @@ public class Fenetre extends JFrame {
     public static void main(String[] args){
         Fenetre fen = new Fenetre();
     }
+
+
+
+
 }
 
 

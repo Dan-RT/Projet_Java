@@ -20,7 +20,11 @@ import java.util.ArrayList;
 
 public class Dessin implements Observable, MouseListener  {
 
-    private ArrayList<JPanel> liste_Image = new ArrayList<JPanel>();
+    //private ArrayList<JPanel> liste_Image = new ArrayList<JPanel>();
+    private ArrayList<Cercle> liste_Cercle = new ArrayList<Cercle>();
+    private ArrayList<Rectangle> liste_Rectangle = new ArrayList<Rectangle>();
+    private JPanel form_selected = new JPanel();
+
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
 
     private JPanel image = new JPanel();
@@ -95,12 +99,19 @@ public class Dessin implements Observable, MouseListener  {
 
             System.out.println("Ajout cercle!!");
 
-            Cercle cercle_tmp = new Cercle(0, 0);
+
+            int hauteur = 50, longueur = 50;
+            int x = mouse_click_x - hauteur/2;
+            int y = mouse_click_y - longueur/2;
+
+
+
+            Cercle cercle_tmp = new Cercle(x, y, hauteur, longueur);
             image.add(cercle_tmp);
             //pan_dessin.add(cercle_tmp);
-            cercle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
+            cercle_tmp.setBounds(x, y, hauteur, longueur);
 
-            liste_Image.add(cercle_tmp);
+            liste_Cercle.add(cercle_tmp);
 
             updateObservateur();
         }
@@ -117,16 +128,19 @@ public class Dessin implements Observable, MouseListener  {
         public void actionPerformed(ActionEvent arg0) {
             label.setText("Rectangle");
 
+            int hauteur = 50, longueur = 50;
+            int x = mouse_click_x - hauteur/2;
+            int y = mouse_click_y - longueur/2;
             System.out.println("Ajout Rectange!!");
 
-            Rectangle rectangle_tmp = new Rectangle(0, 0);
+            Rectangle rectangle_tmp = new Rectangle(x, y, hauteur, longueur);
             image.add(rectangle_tmp);
             //pan_dessin.add(rectangle_tmp);
 
             rectangle_tmp.setBackground(Color.blue);
-            rectangle_tmp.setBounds(mouse_click_x, mouse_click_y, 50, 50);
+            rectangle_tmp.setBounds(x, y, hauteur, longueur);
 
-            liste_Image.add(rectangle_tmp);
+            liste_Rectangle.add(rectangle_tmp);
 
             updateObservateur();
         }
@@ -150,8 +164,29 @@ public class Dessin implements Observable, MouseListener  {
         mouse_click_x = event.getX();
         mouse_click_y = event.getY();
         label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
+
+        form_selection(mouse_click_x, mouse_click_y);
         updateObservateur();
     }
+
+
+    public boolean form_selection (int X, int Y) {
+        for (Cercle tmp : liste_Cercle) {
+            if (tmp.selected(X, Y)) {
+                form_selected = tmp;
+                return true;
+            }
+        }
+        for (Rectangle tmp : liste_Rectangle) {
+            if (tmp.selected(X, Y)) {
+                form_selected = tmp;
+                return true;
+            }
+        }
+        form_selected = null;
+        return false;
+    }
+
 
     //Méthode appelée lors du survol de la souris
     public void mouseEntered(MouseEvent event) { }

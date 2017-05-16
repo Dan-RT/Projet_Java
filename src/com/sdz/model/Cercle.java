@@ -8,10 +8,15 @@ import java.awt.*;
  */
 public class Cercle  extends JPanel {
 
-    private int posX = -50;
-    private int posY = -50;
+    private int posX = 50;
+    private int posY = 50;
 
     private Color color = Color.red;
+
+    public Cercle(int X, int Y) {
+        setPosX(X);
+        setPosY(Y);
+    }
 
     public void paintComponent (Graphics g) {
 

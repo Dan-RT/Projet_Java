@@ -4,18 +4,16 @@ import java.awt.*;
 
 public class Rectangle extends JPanel {
 
-    private int posX = -50;
-    private int posY = -50;
+    private int posX = 200;
+    private int posY = 70;
 
     /*private int height = 0;
     private int width = 0;
     private Color color = Color.red;*/
 
-    public void paintComponent (Graphics g) {
-
-        g.setColor(Color.red);
-        g.fillRect(posX, posY, 50, 50);
-
+    public Rectangle (int X, int Y) {
+        setPosX(X);
+        setPosY(Y);
     }
 
     public int getPosX() {

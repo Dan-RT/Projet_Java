@@ -1,22 +1,14 @@
 package com.sdz.observer;
 
-/**
- * Created by Daniel on 14/05/2017.
- */
-public class Bouton_Observable implements Observable {
+import com.sdz.model.Dessin;
+import com.sdz.model.Image;
+
+import javax.swing.*;
+import java.util.ArrayList;
 
 
-    public void addObservateur(Observateur obs) {
-
-    }
-
-    public void delObservateur() {
-
-    }
-
-
-    public void updateObservateur() {
-
-    }
-
+public interface Bouton_Observable {
+    public void addObservateur(Bouton_Observateur obs);
+    public void updateObservateur();
+    public void delObservateur();
 }

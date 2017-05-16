@@ -19,10 +19,8 @@ public class Fenetre extends JFrame {
     private Dessin test_dessin = new Dessin();
 
     //private Image tmp_image = new Image();
-
-    private Container container;
-
-    private ArrayList<Dessin> liste_dessin = new ArrayList<Dessin>();
+    //private Container container;
+    //private ArrayList<Dessin> liste_dessin = new ArrayList<Dessin>();
 
     public Fenetre(){
 
@@ -39,12 +37,46 @@ public class Fenetre extends JFrame {
         });
 
         this.setVisible(true);
-        test_dessin.go();
+        test_dessin.initial_print();
+        //test_dessin.go();
         //go();
 
     }
 
-    public void go() {
+    public static void main(String[] args){
+        Fenetre fen = new Fenetre();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*public void go() {
         // Les coordonnées de départ de notre rond
         int x = pan.getPosX(), y = pan.getPosY();
         // Le booléen pour savoir si l'on recule ou non sur l'axe x
@@ -91,11 +123,4 @@ public class Fenetre extends JFrame {
             }
         }
     }
-
-
-
-    //Méthode main() lançant le programme
-    public static void main(String[] args){
-        Fenetre fen = new Fenetre();
-    }
-}
+*/

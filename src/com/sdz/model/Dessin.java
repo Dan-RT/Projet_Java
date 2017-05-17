@@ -168,7 +168,10 @@ public class Dessin implements Observable, MouseListener  {
     class Change_color_button_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
             if (form_selected != null) {
-                form_selected.change_color();
+                form_selected.rotate_form();
+                form_selected.setBounds(mouse_click_x-38, mouse_click_y-38, 75, 75);
+                form_selected.setBackground(Color.cyan);
+
             }
         }
     }
@@ -228,11 +231,6 @@ public class Dessin implements Observable, MouseListener  {
     public void mouseReleased(MouseEvent event) { }
 
 }
-
-
-
-
-
 
 
 

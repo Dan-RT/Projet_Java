@@ -27,6 +27,7 @@ public class Fenetre extends JFrame {
         this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
 
         this.test_dessin.addObservateur(new Observateur() {
             public void update(JPanel pan_dessin) {

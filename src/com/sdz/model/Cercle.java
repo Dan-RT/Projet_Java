@@ -2,6 +2,8 @@ package com.sdz.model;
 
 import javax.swing.*;
 import java.awt.*;
+
+import java.awt.geom.Ellipse2D;
 import java.awt.Rectangle;
 
 /**
@@ -37,8 +39,13 @@ public class Cercle extends JPanel {
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
+        Ellipse2D ellispe_tmp = new Ellipse2D.Double(posX, posY, hauteur, longueur-10);
+
         g2d.setColor(color);
-        java.awt.Rectangle rect2 = new java.awt.Rectangle(posX, posY, hauteur, longueur);
+
+
+        //java.awt.Rectangle rect2 = new java.awt.Rectangle(posX, posY, hauteur, longueur);
+
 
         for (int i = 0; i < nb_times_rotated; i++){
             g2d.rotate(Math.toRadians(45), (hauteur+hauteur/2)/2, (longueur+longueur/2)/2);
@@ -52,8 +59,10 @@ public class Cercle extends JPanel {
             nb_times_rotated++;
         }
 
-        g2d.draw(rect2);
-        g2d.fill(rect2);
+        g2d.fill(ellispe_tmp);
+        g2d.draw(ellispe_tmp);
+        //g2d.draw(rect2);
+        //g2d.fill(rect2);
     }
 
 
@@ -90,47 +99,6 @@ public class Cercle extends JPanel {
     }
 
 
-/*
-
-    public void paintIcon(Component c, Graphics g, int x, int y)
-    {
-        Graphics2D g2 = (Graphics2D)g.create();
-
-        int cWidth = icon.getIconWidth() / 2;
-        int cHeight = icon.getIconHeight() / 2;
-        int xAdjustment = (icon.getIconWidth() % 2) == 0 ? 0 : -1;
-        int yAdjustment = (icon.getIconHeight() % 2) == 0 ? 0 : -1;
-
-        if (rotate == Rotate.DOWN)
-        {
-            g2.translate(x + cHeight, y + cWidth);
-            g2.rotate( Math.toRadians( 90 ) );
-            icon.paintIcon(c, g2,  -cWidth, yAdjustment - cHeight);
-        }
-        else if (rotate == Rotate.UP)
-        {
-            g2.translate(x + cHeight, y + cWidth);
-            g2.rotate( Math.toRadians( -90 ) );
-            icon.paintIcon(c, g2,  xAdjustment - cWidth, -cHeight);
-        }
-        else if (rotate == Rotate.UPSIDE_DOWN)
-        {
-            g2.translate(x + cWidth, y + cHeight);
-            g2.rotate( Math.toRadians( 180 ) );
-            icon.paintIcon(c, g2, xAdjustment - cWidth, yAdjustment - cHeight);
-        }
-        else if (rotate == Rotate.ABOUT_CENTER)
-        {
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setClip(x, y, getIconWidth(), getIconHeight());
-            g2.translate((getIconWidth() - icon.getIconWidth()) / 2, (getIconHeight() - icon.getIconHeight()) / 2);
-            g2.rotate(Math.toRadians(degrees), x + cWidth, y + cHeight);
-            icon.paintIcon(c, g2, x, y);
-        }
-
-        g2.dispose();
-    }
-*/
 
 
     public int getPosX() {

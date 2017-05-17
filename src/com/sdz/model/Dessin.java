@@ -11,14 +11,21 @@ import com.sdz.vue.Fenetre;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Dessin implements Observable, MouseListener  {
+
 
     //private ArrayList<JPanel> liste_Image = new ArrayList<JPanel>();
     private ArrayList<Cercle> liste_Cercle = new ArrayList<Cercle>();
@@ -28,7 +35,8 @@ public class Dessin implements Observable, MouseListener  {
 
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
 
-    private JPanel image = new JPanel();
+    //private JPanel  = new JPanel();
+    private ImagePanel image = new ImagePanel();
     private Observateur dessin_observer;
 
     private Button bouton_1 = new Button("Cercle");
@@ -44,28 +52,29 @@ public class Dessin implements Observable, MouseListener  {
 
     public Dessin () {
 
-        pan_dessin.setBounds(0, 0, 500, 400);
-        pan_dessin.setBackground(Color.white);
-        pan_dessin.setLayout(null);
-
-        image.setLayout(null);
-        image.setBounds(0, 0, 500, 400);
-        pan_dessin.add(image);
+        pan_dessin.setBounds(0, 0, 800, 525);
         pan_dessin.setBackground(Color.green);
+        pan_dessin.setLayout(null);
+        image.setBounds(0, 0, 800, 525);
+        image.setLayout(null);
+        pan_dessin.add(image);
+
+
+
 
         System.out.println("Dessin()");
 
 
         /*   Boutons    */
         JPanel south = new JPanel();
-        south.setBackground(Color.red);
+        south.setBackground(Color.white);
         south.add(bouton_1);
         south.add(bouton_2);
         south.add(erase_button);
         south.add(change_color_button);
         south.add(erase_all_button);
         south.add(label);
-        south.setBounds(0, 400, 500, 200);
+        south.setBounds(0, 525, 800, 200);
         pan_dessin.add(south);
 
         bouton_1.addActionListener(new Cercle_Listener());
@@ -208,15 +217,19 @@ public class Dessin implements Observable, MouseListener  {
 
     public void mouseClicked(MouseEvent event) {
         //Méthode appelée lors du clic de souris
-        if (cercle_selected == null && rectangle_selected == null) {
-            mouse_click_x = event.getX();
-            mouse_click_y = event.getY();
-            label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
+        if (event.getY() > 100) {
+            if (cercle_selected == null && rectangle_selected == null) {
+                mouse_click_x = event.getX();
+                mouse_click_y = event.getY();
+                label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
 
-            form_selection(mouse_click_x, mouse_click_y);
-            updateObservateur();
+                form_selection(mouse_click_x, mouse_click_y);
+                updateObservateur();
+            } else {
+                form_selection(mouse_click_x, mouse_click_y);
+            }
         } else {
-            form_selection(mouse_click_x, mouse_click_y);
+            System.out.println("Y : " + event.getY());
         }
 
     }
@@ -265,85 +278,53 @@ public class Dessin implements Observable, MouseListener  {
     //Méthode appelée lorsque l'on relâche le clic de souris
     public void mouseReleased(MouseEvent event) { }
 
+    public class ImagePanel extends JPanel{
+
+        private BufferedImage mur;
+        public ImagePanel() {
+            try {
+                mur = ImageIO.read(new File("images/mur2.png"));
+            } catch (IOException ex) {
+                Logger.getLogger(Panel.class.getName()).log(
+                        Level.SEVERE, null, ex);
+            }
+        }
+
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(mur, 0, 0, this);
+            loadFont(g);
+        }
+
+    }
+
+    private void loadFont(Graphics g) {
+
+        try{
+
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Font font = Font.createFont(Font.TRUETYPE_FONT,new File("Ro.ttf"));
+            ge.registerFont(font);
+            font = font.deriveFont(Font.TRUETYPE_FONT,60);
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            g2d.setColor(Color.black);
+            g2d.setFont(font);
+            g2d.drawString(" Dessine moi un mouton...", 50,60);
+            font = font.deriveFont(Font.TRUETYPE_FONT,40);
+            g2d.setColor(Color.black);
+            g2d.setFont(font);
+
+
+        }catch(IOException e){
+
+        }catch(FontFormatException e){
+
+        }catch(IllegalArgumentException e){
+
+        }
+    }
 }
 
 
-
-
-
-
-
-
-
-
-/*
-        public void addObservateur(Bouton_Observateur obs) {
-            this.bouton_observer = obs;
-        }
-
-        public void delObservateur() {
-
-        }
-
-
-        public void updateObservateur() {
-            this.bouton_observer.update(pushed);
-        }
-
-        public void actionPerformed(ActionEvent arg0) {
-            pushed = true;
-            updateObservateur();
-            pushed = false;
-        }
-
-        public void go() {
-        // Les coordonnées de départ de notre rond
-        int x = image_test.getPosX(), y = image_test.getPosY();
-        // Le booléen pour savoir si l'on recule ou non sur l'axe x
-        boolean backX = false;
-        // Le booléen pour savoir si l'on recule ou non sur l'axe y
-        boolean backY = false;
-
-        // Dans cet exemple, j'utilise une boucle while
-        // Vous verrez qu'elle fonctionne très bien
-        while (true) {
-            // Si la coordonnée x est inférieure à 1, on avance
-            if (x < 1)
-                backX = false;
-            // Si la coordonnée x est supérieure à la taille du Panneau moins la taille du rond, on recule
-            if (x > image_test.getWidth() - 50)
-                backX = true;
-            // Idem pour l'axe y
-            if (y < 1)
-                backY = false;
-            if (y > image_test.getHeight() - 50)
-                backY = true;
-
-            // Si on avance, on incrémente la coordonnée
-            // backX est un booléen, donc !backX revient à écrire
-            // if (backX == false)
-            if (!backX)
-                image_test.setPosX(++x);
-                // Sinon, on décrémente
-            else
-                image_test.setPosX(--x);
-            // Idem pour l'axe Y
-            if (!backY)
-                image_test.setPosY(++y);
-            else
-                image_test.setPosY(--y);
-
-            // On redessine notre Panneau
-            image_test.repaint();
-            // Comme on dit : la pause s'impose ! Ici, trois millièmes de seconde
-            try {
-                Thread.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            updateObservateur();
-        }
-    }
-
-        */

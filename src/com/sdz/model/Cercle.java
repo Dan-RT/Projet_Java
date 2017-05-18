@@ -237,7 +237,25 @@ public class Cercle extends JPanel {
     }
 
 
-    public void translate () {
-        x_panel = x_panel + 50;
+    public void translate (int choice) {
+
+        switch (choice) {
+            case 1:
+                //up
+                y_panel = y_panel - 20;
+                break;
+            case 2:
+                //down
+                y_panel = y_panel + 20;
+                break;
+            case 3:
+                //right
+                x_panel = x_panel + 20;
+                break;
+            case 4:
+                //left
+                x_panel = x_panel - 20;
+                break;
+        }
     }
 }

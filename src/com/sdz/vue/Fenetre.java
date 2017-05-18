@@ -22,7 +22,7 @@ public class Fenetre extends JFrame {
     public Fenetre(){
 
         this.setTitle("Dessine-moi un mouton !");
-        this.setSize(800, 600);
+        this.setSize(800, 650);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

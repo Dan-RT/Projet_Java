@@ -42,7 +42,6 @@ public class Rectangle extends JPanel {
 
         }
 
-
         if (rotate) {
             g2d.rotate(Math.toRadians(45), (hauteur+hauteur/2)/2, (longueur+longueur/2)/2);
             rotate = false;

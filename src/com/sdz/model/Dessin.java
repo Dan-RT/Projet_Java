@@ -3,10 +3,10 @@ package com.sdz.model;
 import com.sdz.observer.Bouton_Observateur;
 import com.sdz.observer.Observable;
 import com.sdz.observer.Observateur;
-import com.sdz.observer.Bouton_Observable;
-import com.sdz.model.Rectangle;
-import com.sdz.model.Cercle;
-import com.sdz.vue.Fenetre;
+
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 import java.awt.event.MouseEvent;
@@ -45,6 +45,7 @@ public class Dessin implements Observable, MouseListener  {
     private Button erase_button = new Button("Erase");
     private Button erase_all_button = new Button("Clear All");
     private JLabel label = new JLabel("Le JLabel");
+    private JSlider slide = new JSlider();
 
 
     private int mouse_click_x = 100;
@@ -60,6 +61,13 @@ public class Dessin implements Observable, MouseListener  {
         pan_dessin.add(image);
 
 
+        slide.setMaximum(50);
+        slide.setMinimum(0);
+        slide.setValue(25);
+        slide.setPaintTicks(true);
+        slide.setPaintLabels(true);
+
+        slide.addChangeListener(new Slider_Listener());
 
 
         System.out.println("Dessin()");
@@ -74,6 +82,7 @@ public class Dessin implements Observable, MouseListener  {
         south.add(change_color_button);
         south.add(erase_all_button);
         south.add(label);
+        south.add(slide);
         south.setBounds(0, 525, 800, 200);
         pan_dessin.add(south);
 
@@ -116,13 +125,15 @@ public class Dessin implements Observable, MouseListener  {
                 System.out.println("Ajout cercle!!");
 
                 int hauteur = 50, longueur = 50;
-                int x = mouse_click_x - hauteur/2;
-                int y = mouse_click_y - longueur/2;
+                int x = mouse_click_x - hauteur;
+                int y = mouse_click_y - longueur;
+
 
                 Cercle cercle_tmp = new Cercle(x, y, hauteur, longueur);
-                //cercle_tmp.setBackground(Color.cyan);
+                cercle_tmp.setBackground(Color.cyan);
+                cercle_tmp.setOpaque(true);
 
-                cercle_tmp.setOpaque(false);
+                //cercle_tmp.setOpaque(false);
                 image.add(cercle_tmp);
                 //pan_dessin.add(cercle_tmp);
                 cercle_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
@@ -187,7 +198,6 @@ public class Dessin implements Observable, MouseListener  {
         public void actionPerformed(ActionEvent arg0) {
             if (cercle_selected != null) {
                 image.remove(cercle_selected);
-                //cercle_selected.rotate_form();
                 cercle_selected = null;
                 updateObservateur();
             }
@@ -212,7 +222,59 @@ public class Dessin implements Observable, MouseListener  {
         }
     }
 
+    class Slider_Listener implements ChangeListener {
 
+        public void stateChanged(ChangeEvent event){
+
+            label.setText("Valeur actuelle : " + ((JSlider)event.getSource()).getValue());
+            int value = ((JSlider)event.getSource()).getValue();
+
+            System.out.println("Valeur : " + value);
+
+            //cercle_selected.setSize_up(((JSlider)event.getSource()).getValue());
+
+            if (cercle_selected != null) {
+                int delta = cercle_selected.getSize_up() - value;
+                cercle_selected.setSize_up(value);
+                System.out.println("Delta : " + delta);
+
+                //cercle_selected.setOpaque(true);
+                //cercle_selected.setBackground(Color.yellow);
+
+                if (delta < 0) {
+
+                    System.out.println("Agrandissement de : " + (-1)*delta);
+                    System.out.println("X : " + cercle_selected.getPosX());
+                    System.out.println("Y : " + cercle_selected.getPosY());
+
+                    cercle_selected.resize_draw(true);
+
+                    /*cercle_selected.setBounds(cercle_selected.getPosX()-1,
+                                                cercle_selected.getPosX()-1,
+                                                cercle_selected.getWidth()+1,
+                                                cercle_selected.getHeight()+1);*/
+                } else {
+                    /*cercle_selected.setBounds(cercle_selected.getPosX()+1,
+                            cercle_selected.getPosX()+1,
+                            cercle_selected.getWidth()-1,
+                            cercle_selected.getHeight()-1);*/
+                    System.out.println("Diminution de : " + (-1)*delta);
+
+                    cercle_selected.resize_draw(false);
+                }
+
+                //image.remove(cercle_selected);
+                //cercle_selected = null;
+                updateObservateur();
+            }
+            if (rectangle_selected != null) {
+                //image.remove(rectangle_selected);
+                rectangle_selected = null;
+                updateObservateur();
+            }
+        }
+
+    }
 
 
     public void mouseClicked(MouseEvent event) {

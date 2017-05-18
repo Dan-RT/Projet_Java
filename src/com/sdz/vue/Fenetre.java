@@ -80,7 +80,6 @@ public class Fenetre extends JFrame {
 
 
 
-
     /*public void go() {
         // Les coordonnées de départ de notre rond
         int x = pan.getPosX(), y = pan.getPosY();

@@ -26,6 +26,11 @@ public class Cercle extends JPanel {
     private int nb_times_rized_up = 0;
     private int nb_times_rized_down = 0;
 
+    private int x_panel = 0;
+    private int y_panel = 0;
+    private int h_panel = 0;
+    private int w_panel = 0;
+
     private Color color = Color.red;
 
     public Cercle(int X, int Y, int Hauteur, int Longueur) {
@@ -116,7 +121,6 @@ public class Cercle extends JPanel {
         g2d.draw(ellispe_tmp);
     }
 
-
     public boolean selected (int X, int Y) {
 
         int x_max = x_min+hauteur/2;
@@ -193,5 +197,47 @@ public class Cercle extends JPanel {
         } else {
             resize = 2;
         }
+    }
+
+
+
+
+
+
+    public void setX_panel(int data) {
+        this.x_panel = data;
+    }
+
+    public int getX_panel() {
+        return x_panel;
+    }
+
+    public void setY_panel(int data) {
+        this.y_panel = data;
+    }
+
+    public int getY_panel() {
+        return y_panel;
+    }
+
+    public void setH_panel(int data) {
+        this.h_panel = data;
+    }
+
+    public int getH_panel() {
+        return h_panel;
+    }
+
+    public void setW_panel(int data) {
+        this.w_panel = data;
+    }
+
+    public int getW_panel() {
+        return w_panel;
+    }
+
+
+    public void translate () {
+        x_panel = x_panel + 50;
     }
 }

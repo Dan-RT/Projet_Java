@@ -55,7 +55,6 @@ public class Cercle extends JPanel {
 
         g2d.setColor(color);
 
-        //java.awt.Rectangle rect2 = new java.awt.Rectangle(posX, posY, hauteur, longueur);
 
         for (int i = 0; i < nb_times_rotated; i++){
             g2d.rotate(Math.toRadians(45), (hauteur+hauteur/2)/2, (longueur+longueur/2)/2);
@@ -67,10 +66,7 @@ public class Cercle extends JPanel {
             nb_times_rotated++;
         }
 
-
-
         for (int i = 0; i < nb_times_rized_up; i++){
-            //g2d.scale(1.1, 1.1);
             zoom = 1.1;
             zoomWidth = longueur * zoom;
             zoomHeight = hauteur * zoom;
@@ -78,13 +74,9 @@ public class Cercle extends JPanel {
             anchory = (hauteur - zoomHeight) / 2;
             g2d.translate(anchorx, anchory);
             g2d.scale(zoom, zoom);
-
-            //g2d.translate(-100, -100);
         }
         for (int i = 0; i < nb_times_rized_down; i++){
-            //g2d.scale(0.9, 0.9);
-            zoom = 0.89;
-
+            zoom = 0.9;
             zoomWidth = longueur * zoom;
             zoomHeight = hauteur * zoom;
             anchorx = (longueur - zoomWidth) / 2;
@@ -94,26 +86,19 @@ public class Cercle extends JPanel {
         }
         if (resize > 0) {
             if (resize == 1) {
-
-                //g2d.scale(1.1, 1.1);
                 zoom = 1.1;
-
                 zoomWidth = longueur * zoom;
                 zoomHeight = hauteur * zoom;
                 anchorx = (longueur - zoomWidth) / 2;
                 anchory = (hauteur - zoomHeight) / 2;
                 g2d.translate(anchorx, anchory);
                 g2d.scale(zoom, zoom);
-                //g2d.translate(-100, -100);
 
-
-                //g2d.scale(1.1, 1.1);
                 resize = 0;
                 nb_times_rized_up++;
             } else if (resize == 2) {
 
-                zoom = 0.89;
-
+                zoom = 0.9;
                 zoomWidth = longueur * zoom;
                 zoomHeight = hauteur * zoom;
                 anchorx = (longueur - zoomWidth) / 2;
@@ -121,11 +106,11 @@ public class Cercle extends JPanel {
                 g2d.translate(anchorx, anchory);
                 g2d.scale(zoom, zoom);
 
-                //g2d.scale(0.9, 0.9);
                 resize = 0;
                 nb_times_rized_down++;
             }
         }
+
 
         g2d.fill(ellispe_tmp);
         g2d.draw(ellispe_tmp);

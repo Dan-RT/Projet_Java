@@ -1,34 +1,35 @@
 package com.sdz.vue;
 
 import java.awt.*;
-import java.util.ArrayList;
 import javax.swing.*;
-
 import com.sdz.model.Dessin;
-import com.sdz.model.Horloge;
-import com.sdz.model.Image;
-import com.sdz.observer.Observable;
 import com.sdz.observer.Observateur;
-import sun.security.krb5.internal.crypto.Des;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.*;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.awt.BorderLayout;
+
+
 
 public class Fenetre extends JFrame {
 
-    //private Image pan = new Image();
-    private Dessin test_dessin = new Dessin();
 
-    //private Image tmp_image = new Image();
-    //private Container container;
-    //private ArrayList<Dessin> liste_dessin = new ArrayList<Dessin>();
+    private Dessin test_dessin = null;
 
     public Fenetre(){
 
-        this.setSize(500, 500);
+        this.setTitle("Dessine-moi un mouton !");
+        this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        //getContentPane().add(background);
+        this.setVisible(true);
 
+        test_dessin = new Dessin();
         this.test_dessin.addObservateur(new Observateur() {
             public void update(JPanel pan_dessin) {
                 System.out.println("Fenetre/update");
@@ -37,7 +38,7 @@ public class Fenetre extends JFrame {
             }
         });
 
-        this.setVisible(true);
+
         test_dessin.initial_print();
         //test_dessin.go();
         //go();
@@ -47,7 +48,6 @@ public class Fenetre extends JFrame {
     public static void main(String[] args){
         Fenetre fen = new Fenetre();
     }
-
 
 
 

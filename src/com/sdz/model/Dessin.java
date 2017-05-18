@@ -61,9 +61,9 @@ public class Dessin implements Observable, MouseListener  {
         pan_dessin.add(image);
 
 
-        slide.setMaximum(50);
+        slide.setMaximum(25);
         slide.setMinimum(0);
-        slide.setValue(25);
+        slide.setValue(12);
         slide.setPaintTicks(true);
         slide.setPaintLabels(true);
 
@@ -125,9 +125,8 @@ public class Dessin implements Observable, MouseListener  {
                 System.out.println("Ajout cercle!!");
 
                 int hauteur = 50, longueur = 50;
-                int x = mouse_click_x - hauteur;
-                int y = mouse_click_y - longueur;
-
+                int x = mouse_click_x - hauteur/2;
+                int y = mouse_click_y - longueur/2;
 
                 Cercle cercle_tmp = new Cercle(x, y, hauteur, longueur);
                 cercle_tmp.setBackground(Color.cyan);
@@ -226,6 +225,7 @@ public class Dessin implements Observable, MouseListener  {
 
         public void stateChanged(ChangeEvent event){
 
+
             label.setText("Valeur actuelle : " + ((JSlider)event.getSource()).getValue());
             int value = ((JSlider)event.getSource()).getValue();
 
@@ -238,8 +238,6 @@ public class Dessin implements Observable, MouseListener  {
                 cercle_selected.setSize_up(value);
                 System.out.println("Delta : " + delta);
 
-                //cercle_selected.setOpaque(true);
-                //cercle_selected.setBackground(Color.yellow);
 
                 if (delta < 0) {
 
@@ -249,27 +247,33 @@ public class Dessin implements Observable, MouseListener  {
 
                     cercle_selected.resize_draw(true);
 
-                    /*cercle_selected.setBounds(cercle_selected.getPosX()-1,
-                                                cercle_selected.getPosX()-1,
-                                                cercle_selected.getWidth()+1,
-                                                cercle_selected.getHeight()+1);*/
                 } else {
-                    /*cercle_selected.setBounds(cercle_selected.getPosX()+1,
-                            cercle_selected.getPosX()+1,
-                            cercle_selected.getWidth()-1,
-                            cercle_selected.getHeight()-1);*/
                     System.out.println("Diminution de : " + (-1)*delta);
 
                     cercle_selected.resize_draw(false);
                 }
 
-                //image.remove(cercle_selected);
-                //cercle_selected = null;
                 updateObservateur();
             }
             if (rectangle_selected != null) {
-                //image.remove(rectangle_selected);
-                rectangle_selected = null;
+                int delta = rectangle_selected.getSize_up() - value;
+                rectangle_selected.setSize_up(value);
+                System.out.println("Delta : " + delta);
+
+
+                if (delta < 0) {
+
+                    System.out.println("Agrandissement de : " + (-1)*delta);
+                    System.out.println("X : " + rectangle_selected.getPosX());
+                    System.out.println("Y : " + rectangle_selected.getPosY());
+
+                    rectangle_selected.resize_draw(true);
+
+                } else {
+                    System.out.println("Diminution de : " + (-1)*delta);
+
+                    rectangle_selected.resize_draw(false);
+                }
                 updateObservateur();
             }
         }
@@ -301,12 +305,15 @@ public class Dessin implements Observable, MouseListener  {
         if (cercle_selected == null && rectangle_selected == null) {
             for (Cercle tmp : liste_Cercle) {
                 if (tmp.selected(X, Y)) {
+                    slide.setValue(12);
                     cercle_selected = tmp;
                     return true;
                 }
             }
             for (Rectangle tmp : liste_Rectangle) {
                 if (tmp.selected(X, Y)) {
+
+                    slide.setValue(12);
                     rectangle_selected = tmp;
                     return true;
                 }

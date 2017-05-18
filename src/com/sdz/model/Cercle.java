@@ -191,6 +191,24 @@ public class Cercle extends JPanel {
         return size_up;
     }
 
+
+    public void setX_min(int data) {
+        this.x_min = data;
+    }
+
+    public int getX_min() {
+        return x_min;
+    }
+
+    public void setY_min(int data) {
+        this.y_min = data;
+    }
+
+    public int getY_min() {
+        return y_min;
+    }
+
+
     public void resize_draw (boolean up) {
         if (up) {
             resize = 1;
@@ -198,10 +216,6 @@ public class Cercle extends JPanel {
             resize = 2;
         }
     }
-
-
-
-
 
 
     public void setX_panel(int data) {
@@ -242,19 +256,23 @@ public class Cercle extends JPanel {
         switch (choice) {
             case 1:
                 //up
-                y_panel = y_panel - 20;
+                y_panel = y_panel - 10;
+                y_min = y_min - 10;
                 break;
             case 2:
                 //down
-                y_panel = y_panel + 20;
+                y_panel = y_panel + 10;
+                y_min = y_min + 10;
                 break;
             case 3:
                 //right
-                x_panel = x_panel + 20;
+                x_panel = x_panel + 10;
+                x_min = x_min + 10;
                 break;
             case 4:
                 //left
-                x_panel = x_panel - 20;
+                x_panel = x_panel - 10;
+                x_min = x_min - 10;
                 break;
         }
     }

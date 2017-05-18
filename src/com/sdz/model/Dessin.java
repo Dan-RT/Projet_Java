@@ -49,7 +49,7 @@ public class Dessin implements Observable, MouseListener  {
     private Button translate_up_button = new Button("Up");
     private Button translate_down_button = new Button("Down");
 
-    private JLabel label = new JLabel("Le JLabel");
+    private JLabel label = new JLabel("Infos");
     private JSlider slide = new JSlider();
 
 
@@ -62,7 +62,7 @@ public class Dessin implements Observable, MouseListener  {
     public Dessin () {
 
         pan_dessin.setBounds(0, 0, 800, 525);
-        pan_dessin.setBackground(Color.green);
+        //pan_dessin.setBackground(Color.green);
         pan_dessin.setLayout(null);
 
 
@@ -90,7 +90,7 @@ public class Dessin implements Observable, MouseListener  {
         translation.add(translate_left_button, BorderLayout.WEST);
         translation.add(translate_right_button, BorderLayout.EAST);
 
-        translation.setBackground(Color.green);
+        //translation.setBackground(Color.green);
         translation.setBounds(0, 525, 150, 150);
 
 
@@ -202,6 +202,12 @@ public class Dessin implements Observable, MouseListener  {
 
                 rectangle_tmp.setOpaque(false);
                 image.add(rectangle_tmp);
+
+                rectangle_tmp.setX_panel(x-hauteur/2);
+                rectangle_tmp.setY_panel(y-longueur/2);
+                rectangle_tmp.setH_panel(hauteur+hauteur/2);
+                rectangle_tmp.setW_panel(longueur+longueur/2);
+
                 rectangle_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
 
                 liste_Rectangle.add(rectangle_tmp);
@@ -342,26 +348,29 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_up_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            for (Cercle tmp : liste_Cercle) {
-                tmp.translate(1);
-                tmp.setBounds(tmp.getX_panel(), tmp.getY_panel(), tmp.getH_panel(), tmp.getW_panel());
+            if (cercle_selected != null) {
+                cercle_selected.translate(1);
+                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
             }
-            for (Rectangle tmp : liste_Rectangle) {
-
+            if (rectangle_selected != null) {
+                rectangle_selected.translate(1);
+                rectangle_selected.setBounds(rectangle_selected.getX_panel(), rectangle_selected.getY_panel(), rectangle_selected.getH_panel(), rectangle_selected.getW_panel());
             }
             updateObservateur();
+
         }
     }
 
     class Translate_down_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            for (Cercle tmp : liste_Cercle) {
-                tmp.translate(2);
-                tmp.setBounds(tmp.getX_panel(), tmp.getY_panel(), tmp.getH_panel(), tmp.getW_panel());
+            if (cercle_selected != null) {
+                cercle_selected.translate(2);
+                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
             }
-            for (Rectangle tmp : liste_Rectangle) {
-
+            if (rectangle_selected != null) {
+                rectangle_selected.translate(2);
+                rectangle_selected.setBounds(rectangle_selected.getX_panel(), rectangle_selected.getY_panel(), rectangle_selected.getH_panel(), rectangle_selected.getW_panel());
             }
             updateObservateur();
         }
@@ -370,12 +379,13 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_right_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            for (Cercle tmp : liste_Cercle) {
-                tmp.translate(3);
-                tmp.setBounds(tmp.getX_panel(), tmp.getY_panel(), tmp.getH_panel(), tmp.getW_panel());
+            if (cercle_selected != null) {
+                cercle_selected.translate(3);
+                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
             }
-            for (Rectangle tmp : liste_Rectangle) {
-
+            if (rectangle_selected != null) {
+                rectangle_selected.translate(3);
+                rectangle_selected.setBounds(rectangle_selected.getX_panel(), rectangle_selected.getY_panel(), rectangle_selected.getH_panel(), rectangle_selected.getW_panel());
             }
             updateObservateur();
         }
@@ -384,12 +394,13 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_left_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            for (Cercle tmp : liste_Cercle) {
-                tmp.translate(4);
-                tmp.setBounds(tmp.getX_panel(), tmp.getY_panel(), tmp.getH_panel(), tmp.getW_panel());
+            if (cercle_selected != null) {
+                cercle_selected.translate(4);
+                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
             }
-            for (Rectangle tmp : liste_Rectangle) {
-
+            if (rectangle_selected != null) {
+                rectangle_selected.translate(4);
+                rectangle_selected.setBounds(rectangle_selected.getX_panel(), rectangle_selected.getY_panel(), rectangle_selected.getH_panel(), rectangle_selected.getW_panel());
             }
             updateObservateur();
         }

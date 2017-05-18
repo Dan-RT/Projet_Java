@@ -26,7 +26,6 @@ public class Fenetre extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        //getContentPane().add(background);
         this.setVisible(true);
 
         test_dessin = new Dessin();
@@ -40,8 +39,6 @@ public class Fenetre extends JFrame {
 
 
         test_dessin.initial_print();
-        //test_dessin.go();
-        //go();
 
     }
 

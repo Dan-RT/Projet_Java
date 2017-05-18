@@ -307,7 +307,7 @@ public class Dessin implements Observable, MouseListener  {
                     cercle_selected.resize_draw(true);
 
                 } else {
-                    System.out.println("Diminution de : " + (-1)*delta);$
+                    System.out.println("Diminution de : " + (-1)*delta);
                     cercle_selected.resize_draw(false);
                 }
 

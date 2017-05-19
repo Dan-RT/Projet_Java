@@ -51,7 +51,6 @@ public class Rectangle extends JPanel {
         g2d.setColor(color);
         java.awt.Rectangle rect2 = new java.awt.Rectangle(posX, posY, hauteur, longueur);
 
-
         for (int i = 0; i < nb_times_rotated; i++){
             g2d.rotate(Math.toRadians(45), (hauteur+hauteur/2)/2, (longueur+longueur/2)/2);
         }
@@ -109,6 +108,7 @@ public class Rectangle extends JPanel {
 
         g2d.draw(rect2);
         g2d.fill(rect2);
+
     }
 
     public boolean selected (int X, int Y) {
@@ -248,5 +248,18 @@ public class Rectangle extends JPanel {
                 break;
         }
     }
+
+
+    public void shape_infos () {
+
+        int aera = hauteur*longueur;
+        System.out.println("\nAire de la forme : " + aera + " m^2");
+
+        aera = longueur*2 + hauteur*2;
+        System.out.println("Périmètre de la forme : " + aera + " m");
+
+    }
+
+
 
 }

@@ -467,6 +467,7 @@ public class Dessin implements Observable, MouseListener  {
                 if (tmp.selected(X, Y)) {
                     slide.setValue(12);
                     ellipse_selected = tmp;
+                    ellipse_selected.shape_infos();
                     return true;
                 }
             }
@@ -475,6 +476,7 @@ public class Dessin implements Observable, MouseListener  {
 
                     slide.setValue(12);
                     rectangle_selected = tmp;
+                    rectangle_selected.shape_infos();
                     return true;
                 }
             }

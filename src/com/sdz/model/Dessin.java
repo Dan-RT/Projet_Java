@@ -28,19 +28,21 @@ public class Dessin implements Observable, MouseListener  {
 
     private ArrayList<Cercle> liste_Cercle = new ArrayList<Cercle>();
     private ArrayList<Rectangle> liste_Rectangle = new ArrayList<Rectangle>();
+    private ArrayList<Line> liste_Line = new ArrayList<Line>();
     private Cercle cercle_selected = null;
     private Rectangle rectangle_selected = null;
+    private Line line_selected = null;
+
 
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
 
-    //private JPanel  = new JPanel();
     private ImagePanel image = new ImagePanel();
     private Observateur dessin_observer;
 
     private Button bouton_1 = new Button("Ellipse");
     private Button bouton_2 = new Button("Rectangle");
     private Button button_line = new Button("Line");
-    private Button change_color_button = new Button("Rotate");
+    private Button rotate_button = new Button("Rotate");
     private Button erase_button = new Button("Erase");
     private Button erase_all_button = new Button("Clear All");
 
@@ -51,11 +53,6 @@ public class Dessin implements Observable, MouseListener  {
 
     private JLabel label = new JLabel("Infos");
     private JSlider slide = new JSlider();
-
-
-
-
-
     private int mouse_click_x = 100;
     private int mouse_click_y = 150;
 
@@ -64,7 +61,6 @@ public class Dessin implements Observable, MouseListener  {
         pan_dessin.setBounds(0, 0, 800, 525);
         //pan_dessin.setBackground(Color.green);
         pan_dessin.setLayout(null);
-
 
         image.setBounds(0, 0, 800, 525);
         image.setLayout(null);
@@ -80,10 +76,8 @@ public class Dessin implements Observable, MouseListener  {
 
         System.out.println("Dessin()");
 
-
         /*   Translation    */
         JPanel translation = new JPanel();
-
 
         translation.add(translate_up_button, BorderLayout.NORTH);
         translation.add(translate_down_button, BorderLayout.SOUTH);
@@ -94,7 +88,6 @@ public class Dessin implements Observable, MouseListener  {
         translation.setBounds(0, 525, 150, 150);
 
 
-
         /*   Boutons    */
         JPanel south = new JPanel();
         south.setBackground(Color.white);
@@ -102,7 +95,7 @@ public class Dessin implements Observable, MouseListener  {
         south.add(bouton_2);
         south.add(button_line);
         south.add(erase_button);
-        south.add(change_color_button);
+        south.add(rotate_button);
         south.add(erase_all_button);
         south.add(label);
         south.add(slide);
@@ -112,9 +105,10 @@ public class Dessin implements Observable, MouseListener  {
 
         bouton_1.addActionListener(new Cercle_Listener());
         bouton_2.addActionListener(new Rectangle_Listener());
-        change_color_button.addActionListener(new Rotate_Listener());
+        rotate_button.addActionListener(new Rotate_Listener());
         erase_button.addActionListener(new Erase_button_Listener());
         erase_all_button.addActionListener(new Erase_all_button_Listener());
+        button_line.addActionListener(new Line_Listener());
 
         translate_up_button.addActionListener(new Translate_up_Listener());
         translate_down_button.addActionListener(new Translate_down_Listener());
@@ -179,8 +173,6 @@ public class Dessin implements Observable, MouseListener  {
 
         }
 
-        private boolean pushed = false;
-        private Bouton_Observateur bouton_observer;
 
     }
 
@@ -224,20 +216,20 @@ public class Dessin implements Observable, MouseListener  {
         public void actionPerformed(ActionEvent arg0) {
 
             if (cercle_selected == null && rectangle_selected == null) {
-                label.setText("Rectangle");
+                label.setText("Line");
 
-                System.out.println("Ajout Rectangle!!");
+                System.out.println("Ajout Line!!");
 
-                int hauteur = 50, longueur = 50;
+                int hauteur = 200, longueur = 2;
                 int x = mouse_click_x - hauteur/2;
                 int y = mouse_click_y - longueur/2;
 
-                Line rectangle_tmp = new Line (x, y, hauteur, longueur);
+                Line line_tmp = new Line (x, y, hauteur, longueur);
                 //cercle_tmp.setBackground(Color.cyan);
 
-                rectangle_tmp.setOpaque(false);
-                image.add(rectangle_tmp);
-                rectangle_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
+                line_tmp.setOpaque(false);
+                image.add(line_tmp);
+                line_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
 
 
                 updateObservateur();
@@ -249,11 +241,9 @@ public class Dessin implements Observable, MouseListener  {
     class Rotate_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
             if (cercle_selected != null) {
-                cercle_selected.reset_color();
                 cercle_selected.rotate_form();
             }
             if (rectangle_selected != null) {
-                rectangle_selected.reset_color();
                 rectangle_selected.rotate_form();
             }
         }

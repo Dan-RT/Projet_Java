@@ -6,6 +6,7 @@ public class Line extends JPanel {
 
     private int posX = 0;
     private int posY = 0;
+
     private int x_min = 0;
     private int y_min = 0;
     private int hauteur = 0;
@@ -19,13 +20,18 @@ public class Line extends JPanel {
     private int nb_times_rized_down = 0;
 
 
-    private Color color = Color.blue;
+    private int x_panel = 0;
+    private int y_panel = 0;
+    private int h_panel = 0;
+    private int w_panel = 0;
+
+    private Color color = Color.yellow;
 
     public Line(int X, int Y, int Hauteur, int Longueur) {
         x_min = X;
         y_min = Y;
 
-        System.out.println("Create Rectangle");
+        System.out.println("Create Line");
         setHauteur(Hauteur);
         setLongueur(Longueur);
 
@@ -44,10 +50,9 @@ public class Line extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(color);
+        java.awt.Rectangle rect2 = new java.awt.Rectangle(posX, posY, hauteur, longueur);
 
-        g2d.drawLine(posX, posY, posX+50, posY+50);
 
-        /*
         for (int i = 0; i < nb_times_rotated; i++){
             g2d.rotate(Math.toRadians(45), (hauteur+hauteur/2)/2, (longueur+longueur/2)/2);
         }
@@ -104,7 +109,7 @@ public class Line extends JPanel {
         }
 
         g2d.draw(rect2);
-        g2d.fill(rect2);*/
+        g2d.fill(rect2);
     }
 
     public boolean selected (int X, int Y) {
@@ -182,5 +187,67 @@ public class Line extends JPanel {
         }
     }
 
+
+
+
+
+    public void setX_panel(int data) {
+        this.x_panel = data;
+    }
+
+    public int getX_panel() {
+        return x_panel;
+    }
+
+    public void setY_panel(int data) {
+        this.y_panel = data;
+    }
+
+    public int getY_panel() {
+        return y_panel;
+    }
+
+    public void setH_panel(int data) {
+        this.h_panel = data;
+    }
+
+    public int getH_panel() {
+        return h_panel;
+    }
+
+    public void setW_panel(int data) {
+        this.w_panel = data;
+    }
+
+    public int getW_panel() {
+        return w_panel;
+    }
+
+
+    public void translate (int choice) {
+
+        switch (choice) {
+            case 1:
+                //up
+                y_panel = y_panel - 10;
+                y_min = y_min - 10;
+                break;
+            case 2:
+                //down
+                y_panel = y_panel + 10;
+                y_min = y_min + 10;
+                break;
+            case 3:
+                //right
+                x_panel = x_panel + 10;
+                x_min = x_min + 10;
+                break;
+            case 4:
+                //left
+                x_panel = x_panel - 10;
+                x_min = x_min - 10;
+                break;
+        }
+    }
 
 }

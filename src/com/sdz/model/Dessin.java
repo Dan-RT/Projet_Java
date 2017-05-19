@@ -26,21 +26,19 @@ import java.util.logging.Logger;
 
 public class Dessin implements Observable, MouseListener  {
 
-    private ArrayList<Cercle> liste_Cercle = new ArrayList<Cercle>();
+    private ArrayList<Ellipse> liste_Ellipse = new ArrayList<Ellipse>();
     private ArrayList<Rectangle> liste_Rectangle = new ArrayList<Rectangle>();
-    private ArrayList<Line> liste_Line = new ArrayList<Line>();
-    private Cercle cercle_selected = null;
+    private Ellipse ellipse_selected = null;
     private Rectangle rectangle_selected = null;
-    private Line line_selected = null;
-
 
     private JPanel pan_dessin = new JPanel();   //ce sur quoi on va venir coller chaque dessin
 
     private ImagePanel image = new ImagePanel();
     private Observateur dessin_observer;
 
-    private Button bouton_1 = new Button("Ellipse");
-    private Button bouton_2 = new Button("Rectangle");
+    private Button ellipse_button = new Button("Ellipse");
+    private Button rectangle_button = new Button("Rectangle");
+    private Button circle_button = new Button("Circle");
     private Button button_line = new Button("Line");
     private Button rotate_button = new Button("Rotate");
     private Button erase_button = new Button("Erase");
@@ -91,8 +89,9 @@ public class Dessin implements Observable, MouseListener  {
         /*   Boutons    */
         JPanel south = new JPanel();
         south.setBackground(Color.white);
-        south.add(bouton_1);
-        south.add(bouton_2);
+        south.add(circle_button);
+        south.add(ellipse_button);
+        south.add(rectangle_button);
         south.add(button_line);
         south.add(erase_button);
         south.add(rotate_button);
@@ -103,8 +102,9 @@ public class Dessin implements Observable, MouseListener  {
         south.setBounds(0, 525, 800, 200);
         pan_dessin.add(south);
 
-        bouton_1.addActionListener(new Cercle_Listener());
-        bouton_2.addActionListener(new Rectangle_Listener());
+        circle_button.addActionListener(new Circle_Listener());
+        ellipse_button.addActionListener(new Ellipse_Listener());
+        rectangle_button.addActionListener(new Rectangle_Listener());
         rotate_button.addActionListener(new Rotate_Listener());
         erase_button.addActionListener(new Erase_button_Listener());
         erase_all_button.addActionListener(new Erase_all_button_Listener());
@@ -122,8 +122,6 @@ public class Dessin implements Observable, MouseListener  {
         updateObservateur();
     }
 
-
-
     public void addObservateur(Observateur obs) {
         this.dessin_observer = obs;
     }
@@ -137,36 +135,35 @@ public class Dessin implements Observable, MouseListener  {
     }
 
 
-    class Cercle_Listener implements ActionListener {
-        //Classe écoutant notre premier bouton
+    class Ellipse_Listener implements ActionListener {
 
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected == null && rectangle_selected == null) {
-                label.setText("Cercle");
+            if (ellipse_selected == null && rectangle_selected == null) {
+                label.setText("Ellipse");
 
-                System.out.println("Ajout cercle!!");
+                System.out.println("Ajout ellipse!!");
 
                 int hauteur = 50, longueur = 50;
                 int x = mouse_click_x - hauteur/2;
                 int y = mouse_click_y - longueur/2;
 
-                Cercle cercle_tmp = new Cercle(x, y, hauteur, longueur);
-                //cercle_tmp.setBackground(Color.cyan);
-                cercle_tmp.setOpaque(false);
+                Ellipse ellipse_tmp = new Ellipse(x, y, hauteur, longueur, true);
+                //ellipse_tmp.setBackground(Color.cyan);
+                ellipse_tmp.setOpaque(false);
 
-                //cercle_tmp.setOpaque(false);
-                image.add(cercle_tmp);
-                //pan_dessin.add(cercle_tmp);
+                //ellipse_tmp.setOpaque(false);
+                image.add(ellipse_tmp);
+                //pan_dessin.add(ellipse_tmp);
 
-                cercle_tmp.setX_panel(x-hauteur/2);
-                cercle_tmp.setY_panel(y-longueur/2);
-                cercle_tmp.setH_panel(hauteur+hauteur/2);
-                cercle_tmp.setW_panel(longueur+longueur/2);
+                ellipse_tmp.setX_panel(x-hauteur/2);
+                ellipse_tmp.setY_panel(y-longueur/2);
+                ellipse_tmp.setH_panel(hauteur+hauteur/2);
+                ellipse_tmp.setW_panel(longueur+longueur/2);
 
-                cercle_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
+                ellipse_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
 
-                liste_Cercle.add(cercle_tmp);
+                liste_Ellipse.add(ellipse_tmp);
 
                 updateObservateur();
             }
@@ -177,10 +174,10 @@ public class Dessin implements Observable, MouseListener  {
     }
 
     class Rectangle_Listener implements ActionListener {
-        //Classe écoutant notre second bouton
+
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected == null && rectangle_selected == null) {
+            if (ellipse_selected == null && rectangle_selected == null) {
                 label.setText("Rectangle");
 
                 System.out.println("Ajout Rectangle!!");
@@ -190,7 +187,7 @@ public class Dessin implements Observable, MouseListener  {
                 int y = mouse_click_y - longueur/2;
 
                 Rectangle rectangle_tmp = new Rectangle(x, y, hauteur, longueur);
-                //cercle_tmp.setBackground(Color.cyan);
+                //ellipse_tmp.setBackground(Color.cyan);
 
                 rectangle_tmp.setOpaque(false);
                 image.add(rectangle_tmp);
@@ -211,26 +208,32 @@ public class Dessin implements Observable, MouseListener  {
     }
 
     class Line_Listener implements ActionListener {
-
         //Classe écoutant notre second bouton
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected == null && rectangle_selected == null) {
-                label.setText("Line");
+            if (ellipse_selected == null && rectangle_selected == null) {
+                label.setText("Rectangle");
 
-                System.out.println("Ajout Line!!");
+                System.out.println("Ajout Rectangle!!");
 
                 int hauteur = 200, longueur = 2;
                 int x = mouse_click_x - hauteur/2;
                 int y = mouse_click_y - longueur/2;
 
-                Line line_tmp = new Line (x, y, hauteur, longueur);
-                //cercle_tmp.setBackground(Color.cyan);
+                Rectangle line_tmp = new Rectangle(x, y, hauteur, longueur);
+                //ellipse_tmp.setBackground(Color.cyan);
 
                 line_tmp.setOpaque(false);
                 image.add(line_tmp);
-                line_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
 
+                line_tmp.setX_panel(x-hauteur/2);
+                line_tmp.setY_panel(y-longueur/2);
+                line_tmp.setH_panel(hauteur+hauteur/2);
+                line_tmp.setW_panel(longueur+longueur/2);
+
+                line_tmp.setBounds(x-hauteur/2, y-longueur/2, 800, 600);
+
+                liste_Rectangle.add(line_tmp);
 
                 updateObservateur();
             }
@@ -238,10 +241,49 @@ public class Dessin implements Observable, MouseListener  {
         }
     }
 
+    class Circle_Listener implements ActionListener {
+
+        public void actionPerformed(ActionEvent arg0) {
+
+            if (ellipse_selected == null && rectangle_selected == null) {
+                label.setText("Cercle");
+
+                System.out.println("Ajout Cercle!!");
+
+                int hauteur = 50, longueur = 50;
+                int x = mouse_click_x - hauteur/2;
+                int y = mouse_click_y - longueur/2;
+
+                Ellipse circle_tmp = new Ellipse(x, y, hauteur, longueur, false);
+                //ellipse_tmp.setBackground(Color.cyan);
+                circle_tmp.setOpaque(false);
+
+                //ellipse_tmp.setOpaque(false);
+                image.add(circle_tmp);
+                //pan_dessin.add(ellipse_tmp);
+
+                circle_tmp.setX_panel(x-hauteur/2);
+                circle_tmp.setY_panel(y-longueur/2);
+                circle_tmp.setH_panel(hauteur+hauteur/2);
+                circle_tmp.setW_panel(longueur+longueur/2);
+
+                circle_tmp.setBounds(x-hauteur/2, y-longueur/2, hauteur+hauteur/2, longueur+longueur/2);
+
+                liste_Ellipse.add(circle_tmp);
+
+                updateObservateur();
+            }
+
+        }
+
+
+    }
+
+
     class Rotate_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            if (cercle_selected != null) {
-                cercle_selected.rotate_form();
+            if (ellipse_selected != null) {
+                ellipse_selected.rotate_form();
             }
             if (rectangle_selected != null) {
                 rectangle_selected.rotate_form();
@@ -251,9 +293,9 @@ public class Dessin implements Observable, MouseListener  {
 
     class Erase_button_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            if (cercle_selected != null) {
-                image.remove(cercle_selected);
-                cercle_selected = null;
+            if (ellipse_selected != null) {
+                image.remove(ellipse_selected);
+                ellipse_selected = null;
                 updateObservateur();
             }
             if (rectangle_selected != null) {
@@ -267,7 +309,7 @@ public class Dessin implements Observable, MouseListener  {
     class Erase_all_button_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            for (Cercle tmp : liste_Cercle) {
+            for (Ellipse tmp : liste_Ellipse) {
                 image.remove(tmp);
             }
             for (Rectangle tmp : liste_Rectangle) {
@@ -287,24 +329,24 @@ public class Dessin implements Observable, MouseListener  {
 
             System.out.println("Valeur : " + value);
 
-            //cercle_selected.setSize_up(((JSlider)event.getSource()).getValue());
+            //ellipse_selected.setSize_up(((JSlider)event.getSource()).getValue());
 
-            if (cercle_selected != null) {
-                int delta = cercle_selected.getSize_up() - value;
-                cercle_selected.setSize_up(value);
+            if (ellipse_selected != null) {
+                int delta = ellipse_selected.getSize_up() - value;
+                ellipse_selected.setSize_up(value);
                 System.out.println("Delta : " + delta);
 
                 if (delta < 0) {
 
                     System.out.println("Agrandissement de : " + (-1)*delta);
-                    System.out.println("X : " + cercle_selected.getPosX());
-                    System.out.println("Y : " + cercle_selected.getPosY());
+                    System.out.println("X : " + ellipse_selected.getPosX());
+                    System.out.println("Y : " + ellipse_selected.getPosY());
 
-                    cercle_selected.resize_draw(true);
+                    ellipse_selected.resize_draw(true);
 
                 } else {
                     System.out.println("Diminution de : " + (-1)*delta);
-                    cercle_selected.resize_draw(false);
+                    ellipse_selected.resize_draw(false);
                 }
 
                 updateObservateur();
@@ -338,9 +380,9 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_up_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected != null) {
-                cercle_selected.translate(1);
-                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
+            if (ellipse_selected != null) {
+                ellipse_selected.translate(1);
+                ellipse_selected.setBounds(ellipse_selected.getX_panel(), ellipse_selected.getY_panel(), ellipse_selected.getH_panel(), ellipse_selected.getW_panel());
             }
             if (rectangle_selected != null) {
                 rectangle_selected.translate(1);
@@ -354,9 +396,9 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_down_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected != null) {
-                cercle_selected.translate(2);
-                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
+            if (ellipse_selected != null) {
+                ellipse_selected.translate(2);
+                ellipse_selected.setBounds(ellipse_selected.getX_panel(), ellipse_selected.getY_panel(), ellipse_selected.getH_panel(), ellipse_selected.getW_panel());
             }
             if (rectangle_selected != null) {
                 rectangle_selected.translate(2);
@@ -369,9 +411,9 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_right_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected != null) {
-                cercle_selected.translate(3);
-                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
+            if (ellipse_selected != null) {
+                ellipse_selected.translate(3);
+                ellipse_selected.setBounds(ellipse_selected.getX_panel(), ellipse_selected.getY_panel(), ellipse_selected.getH_panel(), ellipse_selected.getW_panel());
             }
             if (rectangle_selected != null) {
                 rectangle_selected.translate(3);
@@ -384,9 +426,9 @@ public class Dessin implements Observable, MouseListener  {
     class Translate_left_Listener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            if (cercle_selected != null) {
-                cercle_selected.translate(4);
-                cercle_selected.setBounds(cercle_selected.getX_panel(), cercle_selected.getY_panel(), cercle_selected.getH_panel(), cercle_selected.getW_panel());
+            if (ellipse_selected != null) {
+                ellipse_selected.translate(4);
+                ellipse_selected.setBounds(ellipse_selected.getX_panel(), ellipse_selected.getY_panel(), ellipse_selected.getH_panel(), ellipse_selected.getW_panel());
             }
             if (rectangle_selected != null) {
                 rectangle_selected.translate(4);
@@ -402,7 +444,7 @@ public class Dessin implements Observable, MouseListener  {
     public void mouseClicked(MouseEvent event) {
         //Méthode appelée lors du clic de souris
         if (event.getY() > 100) {
-            if (cercle_selected == null && rectangle_selected == null) {
+            if (ellipse_selected == null && rectangle_selected == null) {
                 mouse_click_x = event.getX();
                 mouse_click_y = event.getY();
                 label.setText("X : " + mouse_click_x + " Y : " + mouse_click_y);
@@ -420,11 +462,11 @@ public class Dessin implements Observable, MouseListener  {
 
 
     public boolean form_selection (int X, int Y) {
-        if (cercle_selected == null && rectangle_selected == null) {
-            for (Cercle tmp : liste_Cercle) {
+        if (ellipse_selected == null && rectangle_selected == null) {
+            for (Ellipse tmp : liste_Ellipse) {
                 if (tmp.selected(X, Y)) {
                     slide.setValue(12);
-                    cercle_selected = tmp;
+                    ellipse_selected = tmp;
                     return true;
                 }
             }
@@ -436,13 +478,13 @@ public class Dessin implements Observable, MouseListener  {
                     return true;
                 }
             }
-            cercle_selected = null;
+            ellipse_selected = null;
             rectangle_selected = null;
             return false;
         } else {
-            if (cercle_selected != null) {
-                cercle_selected.reset_color();
-                cercle_selected = null;
+            if (ellipse_selected != null) {
+                ellipse_selected.reset_color();
+                ellipse_selected = null;
             }
             if (rectangle_selected != null) {
                 rectangle_selected.reset_color();

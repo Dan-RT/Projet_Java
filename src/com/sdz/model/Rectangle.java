@@ -31,7 +31,6 @@ public class Rectangle extends JPanel {
         x_min = X;
         y_min = Y;
 
-        System.out.println("Create Rectangle");
         setHauteur(Hauteur);
         setLongueur(Longueur);
 
